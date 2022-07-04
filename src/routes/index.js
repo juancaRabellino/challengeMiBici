@@ -3,23 +3,21 @@ const router = express.Router()
 const stationsController = require('../controllers/stationsController')
 const usersController = require('../controllers/usersController')
 const passport = require('passport')
-require('../config/passport')
+require('../configs/passport')
 
-const passportAuthenticate = passport.authenticate('jwt', {session: false})
+const passportAuthenticate = passport.authenticate('jwt', { session: false })
 
 //STATIONS
 router.route('/stations')
-  .get(passportAuthenticate, stationsController.findAll)
+  .get(passportAuthenticate, stationsController.findStationsNearby)
   .post(passportAuthenticate, stationsController.createStation)
 
 //USERS
-router.route('/users/signup')
-.post(usersController.signUp)
+router.route('/users')
+  .get(passportAuthenticate, usersController.allUsers)
+  .post(usersController.createUser)
 
 router.route('/users/signin')
-.post(usersController.signIn)
-
-router.route('/users')
-.get(passportAuthenticate, usersController.allUsers)
+  .post(usersController.signIn)
 
 module.exports = router

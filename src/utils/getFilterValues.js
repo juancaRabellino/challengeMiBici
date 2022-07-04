@@ -10,3 +10,5 @@ const getFilterValues = (lat, lon, dist) => {
     }
   ]
 }
+
+module.exports = getFilterValues

@@ -3,7 +3,7 @@ const getDistanceInKm = require('../utils/getDistanceInKm')
 const getFilterValues = require('../utils/getFilterValues')
 
 const stationsController = {
-  findAll: (req, res) => {
+  findStationsNearby: (req, res) => {
     const { query: { latitude, longitude, distance } } = req
 
     Station.find({
@@ -12,18 +12,21 @@ const stationsController = {
     })
       .then(data => {
         const stationsNearby = data.filter(station => getDistanceInKm(station.latitude, station.longitude, latitude, longitude) < distance && station)
-        return res.json({ success: true, response: { stationsNearby, total: stationsNearby.length } })
+        return res.status(200).json({ success: true, response: { stationsNearby, total: stationsNearby.length } })
       })
-      .catch(err => res.json({ success: false, err }))
+      .catch(err => res.status(400).json({ success: false, err }))
   },
 
   createStation: (req, res) => {
     const { id, name, obcn, location, latitude, longitude, status } = req.body
+    if (!id || !name || !latitude || !longitude)
+      return res.status(400).json({ success: false, message: 'Los campos id, name, latitude y longitude son obligatorios.' })
+
     const stationToSave = new Station({ id, name, obcn, location, latitude, longitude, status })
 
     stationToSave.save()
-      .then(stationSaved => res.json({ success: true, response: stationSaved }))
-      .catch(err => res.json({ success: false, response: err }))
+      .then(stationSaved => res.status(201).json({ success: true, response: stationSaved }))
+      .catch(err => res.status(400).json({ success: false, response: err }))
   }
 }
 
