@@ -20,7 +20,7 @@ const stationsController = {
   createStation: (req, res) => {
     const { id, name, obcn, location, latitude, longitude, status } = req.body
     if (!id || !name || !latitude || !longitude)
-      return res.status(400).json({ success: false, message: 'Los campos id, name, latitude y longitude son obligatorios.' })
+      return res.status(400).json({ success: false, message: 'Los parámetros id, name, latitude, longitude y status son obligatorios.' })
 
     const stationToSave = new Station({ id, name, obcn, location, latitude, longitude, status })
 

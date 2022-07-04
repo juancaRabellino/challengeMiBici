@@ -17,6 +17,9 @@ router.route('/users')
   .get(passportAuthenticate, usersController.allUsers)
   .post(usersController.createUser)
 
+router.route('/users/:id')
+  .delete(passportAuthenticate, usersController.deleteUser)
+
 router.route('/users/signin')
   .post(usersController.signIn)
 
